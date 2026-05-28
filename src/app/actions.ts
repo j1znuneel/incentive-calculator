@@ -57,3 +57,19 @@ export async function saveSalesLog(userId: string, carModelId: string, month: st
   });
   revalidatePath("/sales");
 }
+
+export async function getSalesHistory(userId: string) {
+  return await prisma.salesLog.findMany({
+    where: { userId },
+    include: {
+      carModel: true,
+    },
+    orderBy: { month: "desc" },
+  });
+}
+
+export async function getIncentiveSlabs() {
+  return await prisma.incentiveSlab.findMany({
+    orderBy: { minCars: "asc" },
+  });
+}

@@ -16,7 +16,7 @@ import {
 import { saveSalesLog } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
-import { TrendingUp, CarFront, Calculator } from "lucide-react";
+import { TrendingUp, CarFront, Calculator, Minus, Plus } from "lucide-react";
 
 interface Car {
   id: string;
@@ -59,6 +59,18 @@ export function SalesLoggingInterface({
     
     return { payoutPerCar, totalPayout, slab };
   }, [totalCars, slabs]);
+
+  const handleIncrement = (carId: string) => {
+    setSalesData(prev => ({ ...prev, [carId]: (prev[carId] || 0) + 1 }));
+  };
+
+  const handleDecrement = (carId: string) => {
+    setSalesData(prev => {
+      const current = prev[carId] || 0;
+      if (current <= 0) return prev;
+      return { ...prev, [carId]: current - 1 };
+    });
+  };
 
   const handleInputChange = (carId: string, value: string) => {
     const numValue = value === "" ? 0 : parseInt(value);
@@ -129,14 +141,26 @@ export function SalesLoggingInterface({
                     <p className="font-semibold text-sm text-zinc-200">{car.name}</p>
                     <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold">{car.variant}</p>
                   </div>
-                  <div className="w-20">
-                    <Input
-                      type="number"
-                      min="0"
-                      className="text-right border-zinc-700 bg-zinc-950 focus:ring-white focus:border-white h-9"
-                      value={salesData[car.id] || ""}
-                      onChange={(e) => handleInputChange(car.id, e.target.value)}
-                    />
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 rounded-lg border-zinc-700 bg-zinc-950 text-zinc-400 hover:text-white"
+                      onClick={() => handleDecrement(car.id)}
+                    >
+                      <Minus className="h-3 w-3" />
+                    </Button>
+                    <div className="w-8 text-center font-bold text-lg text-white">
+                      {salesData[car.id] || 0}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 rounded-lg border-zinc-700 bg-zinc-950 text-zinc-400 hover:text-white"
+                      onClick={() => handleIncrement(car.id)}
+                    >
+                      <Plus className="h-3 w-3" />
+                    </Button>
                   </div>
                 </div>
               ))}

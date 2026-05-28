@@ -43,7 +43,7 @@ export function Sidebar() {
           <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center">
             <div className="h-4 w-4 bg-black rounded-sm" />
           </div>
-          <span className="font-bold tracking-tight text-lg text-white">Incentive Hub</span>
+          <span className="font-bold tracking-tight text-lg text-white">Quota</span>
         </Link>
       </div>
 
@@ -53,7 +53,7 @@ export function Sidebar() {
             Main Menu
           </p>
           {links.map((link) => {
-            const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("?")[0]));
+            const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
