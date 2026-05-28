@@ -68,8 +68,16 @@ export function CarTable({ initialData }: { initialData: Car[] }) {
   async function handleDelete(id: string) {
     if (!confirm("Are you sure you want to delete this car?")) return;
     try {
-      await deleteCar(id);
-      toast({ title: "Success", description: "Car deleted successfully." });
+      const result = await deleteCar(id);
+      if (result?.error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error,
+        });
+      } else {
+        toast({ title: "Success", description: "Car deleted successfully." });
+      }
     } catch (e) {
       toast({ variant: "destructive", title: "Error", description: "Failed to delete car." });
     }

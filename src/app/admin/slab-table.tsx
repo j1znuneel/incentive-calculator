@@ -71,8 +71,16 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
   async function handleDelete(id: string) {
     if (!confirm("Are you sure you want to delete this slab?")) return;
     try {
-      await deleteSlab(id);
-      toast({ title: "Success", description: "Slab deleted successfully." });
+      const result = await deleteSlab(id);
+      if (result?.error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error,
+        });
+      } else {
+        toast({ title: "Success", description: "Slab deleted successfully." });
+      }
     } catch (e) {
       toast({ variant: "destructive", title: "Error", description: "Failed to delete slab." });
     }

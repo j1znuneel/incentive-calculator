@@ -71,6 +71,12 @@ export default function LoginPage() {
     <div className="flex h-screen w-screen items-center justify-center bg-background">
       <Card className="w-[400px] border-zinc-800">
         <CardHeader className="space-y-1">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center">
+              <div className="h-4 w-4 bg-black rounded-sm" />
+            </div>
+            <span className="font-bold tracking-tight text-xl text-white">Quota</span>
+          </div>
           <CardTitle className="text-2xl font-bold tracking-tight">Login</CardTitle>
           <CardDescription>
             Enter your credentials to access the calculator
