@@ -1,58 +1,60 @@
-# Smart Incentive Calculator
-
-A minimalist, monochromatic web application for calculating sales incentives, built with Next.js, Prisma, and Supabase.
-
-## Tech Stack
-- **Framework**: Next.js (App Router)
-- **Database**: PostgreSQL (Supabase)
-- **ORM**: Prisma
-- **Auth**: NextAuth.js (Credentials Provider)
-- **Styling**: Tailwind CSS + Shadcn UI
-- **Icons**: Lucide React
-
-## Setup Instructions
-
-### 1. Database Setup
-1. Create a new project on [Supabase](https://supabase.com).
-2. Go to **Project Settings > Database** and find your connection strings.
-3. You will need two strings:
-   - **Transaction Pooler** (Port 6543) for `DATABASE_URL`.
-   - **Session Pooler** (Port 5432) for `DIRECT_URL`.
-
-### 2. Environment Variables
-Create a `.env` file in the root directory:
-```env
-DATABASE_URL="postgres://postgres.[YOUR_PROJECT_REF]:[YOUR_PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true"
-DIRECT_URL="postgres://postgres.[YOUR_PROJECT_REF]:[YOUR_PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres"
-
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="any-long-random-string-at-least-32-chars"
+```text
+   ____                   _        
+  / __ \  _   _   ___   | |_   __ _ 
+ / / _` || | | | / _ \  | __| / _` |
+| | (_| || |_| || (_) | | |_ | (_| |
+ \ \__,_| \__,_| \___/   \__| \__,_|
+  \____/                            
 ```
 
-### 3. Install Dependencies
-```bash
-npm install
-```
+# Quota: Smart Incentive Management
 
-### 4. Push Database Schema & Seed
-```bash
-npx prisma db push
-npx prisma db seed
-```
+Quota is a professional, high-performance platform designed for automotive sales teams to log performance and manage complex incentive structures with precision. It replaces messy spreadsheets with a dense, intentional interface focused on efficiency and data clarity.
 
-### 5. Run the App
-```bash
-npm run dev
-```
+## What is Quota?
 
-## Test Accounts
+Quota provides a centralized ecosystem for:
+- **Sales Representatives**: To log monthly vehicle sales and track incentive earnings in real-time.
+- **Administrators**: To manage the vehicle inventory and define the performance-based payout logic (Incentive Tiers).
+
+---
+
+## Getting Started
+
+To explore the platform, you can use the following pre-configured test accounts:
+
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | `admin@test.com` | `admin123` |
-| Sales | `sales@test.com` | `sales123` |
+| **System Administrator** | `admin@test.com` | `admin123` |
+| **Sales Representative** | `sales@test.com` | `sales123` |
 
-## Core Features
-- **Admin Configuration**: Manage car models and incentive slabs. Prevents unauthorized access via middleware.
-- **Sales Portal**: Log car sales volume per month.
-- **Real-time Calculator**: Instantly see your estimated payout based on the active incentive slab.
-- **Monochromatic UI**: High-contrast, dense layout inspired by Vercel and Linear.
+---
+
+## Platform Routes & Functionality
+
+### 1. Sales Portal (`/sales`)
+The primary workspace for Sales Representatives.
+- **Dashboard**: A high-density interface for selecting a reporting period (month) and entering sales volume for specific vehicle models.
+- **Real-time Metrics**: As you enter numbers, the system automatically calculates your current "Payout Tier" and "Estimated Earnings" using the active administrative logic.
+- **Incentive Roadmap**: A visual guide showing upcoming tiers and the volume required to reach higher payout rates.
+
+### 2. Sales History (`/sales/history`)
+- **Reporting Log**: A chronological, tabular view of all historical sales data submitted by the user.
+- **Audit Trail**: Perfect for verifying past submissions and tracking performance over long durations.
+
+### 3. Performance Analytics (`/sales/performance`)
+- **Key Metrics**: High-level summaries of cumulative earnings, lifetime sales volume, and monthly averages.
+- **Monthly Breakdown**: An analytical view that aggregates performance by month, showing exactly which tier was reached and the total payout for that period.
+
+### 4. System Administration (`/admin`)
+Reserved for users with the **Admin** role.
+- **Vehicle Inventory**: Add, edit, or remove vehicle models and variants available for reporting.
+- **Incentive Tiers (Slabs)**: Define the logic that drives the entire system. Set minimum and maximum car counts for specific payout rates (e.g., 1-3 cars = $1,000/car, 4-7 cars = $2,000/car).
+
+---
+
+## User Experience Standards
+Quota is built for professionals who value speed and density:
+- **Zero Fluff**: No unnecessary animations or oversized components.
+- **Dense Data**: Information is organized into clean, scannable tables and compact cards.
+- **Responsive**: Fully functional on desktop and mobile for logging sales on the showroom floor.
