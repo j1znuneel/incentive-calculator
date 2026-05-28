@@ -10,8 +10,8 @@ export default async function RootPage() {
   }
 
   if (session.user.role === "ADMIN") {
-    redirect("/admin");
+    return redirect("/admin");
   }
 
-  redirect("/sales");
+  return redirect("/sales");
 }

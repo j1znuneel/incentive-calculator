@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import { SalesLoggingInterface } from "./sales-logging-interface";
 import { LayoutDashboard } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function SalesPage() {
   const session = await getServerSession(authOptions);
   

@@ -5,6 +5,8 @@ import { SlabTable } from "./slab-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Settings2 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminPage() {
   const cars = await prisma.carModel.findMany({
     orderBy: { createdAt: "desc" },
