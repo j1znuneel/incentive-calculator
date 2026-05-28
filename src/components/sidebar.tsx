@@ -34,6 +34,8 @@ export function Sidebar() {
 
   const links = role === "ADMIN" ? adminLinks : salesLinks;
 
+  if (role === "ADMIN") return null;
+
   return (
     <aside className="w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col hidden md:flex">
       <div className="p-6 border-b border-zinc-800">

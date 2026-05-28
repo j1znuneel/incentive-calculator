@@ -54,7 +54,7 @@ export default function LoginPage() {
         });
       } else {
         router.refresh();
-        router.push("/sales");
+        router.push("/");
       }
     } catch (error) {
       toast({
