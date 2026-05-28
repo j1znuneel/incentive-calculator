@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CarTable } from "./car-table";
 import { SlabTable } from "./slab-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Settings2 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 

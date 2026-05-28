@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { SalesLoggingInterface } from "./sales-logging-interface";
-import { LayoutDashboard } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 

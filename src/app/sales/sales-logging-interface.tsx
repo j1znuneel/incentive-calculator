@@ -3,8 +3,6 @@
 import { useState, useMemo } from "react";
 import { format, startOfMonth } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -72,11 +70,6 @@ export function SalesLoggingInterface({
     });
   };
 
-  const handleInputChange = (carId: string, value: string) => {
-    const numValue = value === "" ? 0 : parseInt(value);
-    setSalesData(prev => ({ ...prev, [carId]: numValue }));
-  };
-
   async function handleSave() {
     setIsSaving(true);
     try {
@@ -86,7 +79,7 @@ export function SalesLoggingInterface({
         }
       }
       toast({ title: "Success", description: "Sales logs saved successfully." });
-    } catch (e) {
+    } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to save logs." });
     } finally {
       setIsSaving(false);
@@ -213,7 +206,7 @@ export function SalesLoggingInterface({
             <div className="pt-6 border-t border-zinc-800 space-y-4">
               <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Incentive Structure</p>
               <div className="space-y-2">
-                {slabs.map((slab, i) => {
+                {slabs.map((slab) => {
                   const isActive = incentiveInfo.slab?.id === slab.id;
                   return (
                     <div 
@@ -246,7 +239,7 @@ export function SalesLoggingInterface({
 
             {totalCars > 0 && !incentiveInfo.slab && (
               <div className="p-3 rounded bg-zinc-800 border border-zinc-700 text-[10px] text-zinc-400 italic">
-                You haven't reached the minimum slab requirement (1+ cars).
+                You haven&apos;t reached the minimum slab requirement (1+ cars).
               </div>
             )}
           </CardContent>

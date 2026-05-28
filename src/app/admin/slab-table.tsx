@@ -47,7 +47,7 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
       await addSlab({ minCars, maxCars, payoutPerCar });
       setIsAddOpen(false);
       toast({ title: "Success", description: "Slab added successfully." });
-    } catch (e) {
+    } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to add slab." });
     }
   }
@@ -63,7 +63,7 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
       await updateSlab(editingSlab.id, { minCars, maxCars, payoutPerCar });
       setEditingSlab(null);
       toast({ title: "Success", description: "Slab updated successfully." });
-    } catch (e) {
+    } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to update slab." });
     }
   }
@@ -81,7 +81,7 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
       } else {
         toast({ title: "Success", description: "Slab deleted successfully." });
       }
-    } catch (e) {
+    } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to delete slab." });
     }
   }

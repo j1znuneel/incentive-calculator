@@ -13,18 +13,22 @@ export default async function PerformancePage() {
   const history = await getSalesHistory(session?.user?.id as string);
   const slabs = await getIncentiveSlabs();
 
+  interface MonthlyPerformance {
+    month: string;
+    totalUnits: number;
+  }
+
   // Aggregate by month
   const performanceByMonth = history.reduce((acc, log) => {
     if (!acc[log.month]) {
       acc[log.month] = {
         month: log.month,
         totalUnits: 0,
-        models: [],
       };
     }
     acc[log.month].totalUnits += log.carsSold;
     return acc;
-  }, {} as Record<string, any>);
+  }, {} as Record<string, MonthlyPerformance>);
 
   const sortedMonths = Object.values(performanceByMonth).sort((a, b) => b.month.localeCompare(a.month));
 

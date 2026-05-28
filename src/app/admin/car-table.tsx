@@ -45,7 +45,7 @@ export function CarTable({ initialData }: { initialData: Car[] }) {
       await addCar({ name, baseSuffix, variant });
       setIsAddOpen(false);
       toast({ title: "Success", description: "Car added successfully." });
-    } catch (e) {
+    } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to add car." });
     }
   }
@@ -60,7 +60,7 @@ export function CarTable({ initialData }: { initialData: Car[] }) {
       await updateCar(editingCar.id, { name, baseSuffix, variant });
       setEditingCar(null);
       toast({ title: "Success", description: "Car updated successfully." });
-    } catch (e) {
+    } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to update car." });
     }
   }
@@ -78,7 +78,7 @@ export function CarTable({ initialData }: { initialData: Car[] }) {
       } else {
         toast({ title: "Success", description: "Car deleted successfully." });
       }
-    } catch (e) {
+    } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to delete car." });
     }
   }
