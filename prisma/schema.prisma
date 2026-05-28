@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  SALES
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  name      String?
+  role      Role       @default(SALES)
+  salesLogs SalesLog[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CarModel {
+  id         String     @id @default(cuid())
+  name       String
+  baseSuffix String
+  variant    String
+  salesLogs  SalesLog[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model IncentiveSlab {
+  id           String   @id @default(cuid())
+  minCars      Int
+  maxCars      Int?     // Nullable for the highest slab (e.g., 8+)
+  payoutPerCar Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SalesLog {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  carModel   CarModel @relation(fields: [carModelId], references: [id])
+  carModelId String
+  month      String   // Storing as YYYY-MM
+  carsSold   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, carModelId, month])
+}
