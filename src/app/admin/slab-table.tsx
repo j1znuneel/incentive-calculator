@@ -113,7 +113,7 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
         </div>
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogTrigger asChild>
-            <Button size="lg" className="bg-white text-black hover:bg-zinc-200 text-base font-bold h-12 px-6">
+            <Button size="lg" className="bg-white text-black hover:bg-zinc-200 text-sm font-semibold h-10 px-4">
               <Plus className="h-5 w-5 mr-2" />
               Add Incentive Tier
             </Button>
