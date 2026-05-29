@@ -37,39 +37,71 @@ export async function deleteCar(id: string) {
 }
 
 // Slab Actions
-async function validateSlabOverlap(minCars: number, maxCars: number | null, excludeId?: string) {
-  const slabs = await prisma.incentiveSlab.findMany();
-  
-  for (const slab of slabs) {
-    if (excludeId && slab.id === excludeId) continue;
+async function recalibrateSlabs() {
+  const slabs = await prisma.incentiveSlab.findMany({
+    orderBy: { minCars: "asc" },
+  });
 
-    const slabMin = slab.minCars;
-    const slabMax = slab.maxCars ?? Infinity;
-    const currentMin = minCars;
-    const currentMax = maxCars ?? Infinity;
+  for (let i = 0; i < slabs.length; i++) {
+    const currentSlab = slabs[i];
+    const nextSlab = slabs[i + 1];
 
-    // Check if current slab overlaps with existing slab
-    if (currentMin <= slabMax && currentMax >= slabMin) {
-      return `Overlap detected with existing slab ${slabMin}${slab.maxCars ? `-${slab.maxCars}` : "+"} cars.`;
+    const newMaxCars = nextSlab ? nextSlab.minCars - 1 : null;
+
+    if (currentSlab.maxCars !== newMaxCars) {
+      await prisma.incentiveSlab.update({
+        where: { id: currentSlab.id },
+        data: { maxCars: newMaxCars },
+      });
     }
   }
-  return null;
 }
 
-export async function addSlab(data: { minCars: number; maxCars: number | null; payoutPerCar: number }) {
-  const overlapError = await validateSlabOverlap(data.minCars, data.maxCars);
-  if (overlapError) return { error: overlapError };
+export async function addSlab(data: { minCars: number; payoutPerCar: number }) {
+  // Check if a slab with this minCars already exists
+  const existing = await prisma.incentiveSlab.findFirst({
+    where: { minCars: data.minCars },
+  });
 
-  await prisma.incentiveSlab.create({ data });
+  if (existing) {
+    return { error: `A tier starting at ${data.minCars} already exists.` };
+  }
+
+  await prisma.incentiveSlab.create({ 
+    data: {
+      minCars: data.minCars,
+      maxCars: null, // Will be recalibrated
+      payoutPerCar: data.payoutPerCar,
+    }
+  });
+
+  await recalibrateSlabs();
   revalidatePath("/admin");
   return { success: true };
 }
 
-export async function updateSlab(id: string, data: { minCars: number; maxCars: number | null; payoutPerCar: number }) {
-  const overlapError = await validateSlabOverlap(data.minCars, data.maxCars, id);
-  if (overlapError) return { error: overlapError };
+export async function updateSlab(id: string, data: { minCars: number; payoutPerCar: number }) {
+  // Check if another slab has this minCars
+  const existing = await prisma.incentiveSlab.findFirst({
+    where: { 
+      minCars: data.minCars,
+      NOT: { id },
+    },
+  });
 
-  await prisma.incentiveSlab.update({ where: { id }, data });
+  if (existing) {
+    return { error: `Another tier starting at ${data.minCars} already exists.` };
+  }
+
+  await prisma.incentiveSlab.update({ 
+    where: { id },
+    data: { 
+      minCars: data.minCars,
+      payoutPerCar: data.payoutPerCar 
+    } 
+  });
+
+  await recalibrateSlabs();
   revalidatePath("/admin");
   return { success: true };
 }
@@ -77,6 +109,7 @@ export async function updateSlab(id: string, data: { minCars: number; maxCars: n
 export async function deleteSlab(id: string) {
   try {
     await prisma.incentiveSlab.delete({ where: { id } });
+    await recalibrateSlabs();
     revalidatePath("/admin");
     return { success: true };
   } catch (error) {
