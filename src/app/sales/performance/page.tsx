@@ -104,7 +104,7 @@ export default async function PerformancePage() {
         <CardContent>
           <div className="space-y-4">
             {monthsWithPayouts.map((m) => (
-              <div key={m.month} className="p-4 rounded-xl border border-zinc-800 bg-zinc-900/40 flex items-center justify-between">
+              <div key={m.month} className="p-4 rounded-xl border border-zinc-800 bg-zinc-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <p className="font-semibold text-sm text-white">
                     {format(parseISO(`${m.month}-01`), "MMMM yyyy")}

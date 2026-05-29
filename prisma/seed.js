@@ -31,26 +31,29 @@ async function main() {
     ],
   });
 
-  // Create Car Models
+  // Create Indian Car Models
   await prisma.carModel.createMany({
     data: [
-      { name: "Model S", baseSuffix: "MS", variant: "Long Range" },
-      { name: "Model 3", baseSuffix: "M3", variant: "Performance" },
-      { name: "Model X", baseSuffix: "MX", variant: "Plaid" },
-      { name: "Model Y", baseSuffix: "MY", variant: "Standard Range" },
+      { name: "Maruti Suzuki Swift", baseSuffix: "SW", variant: "ZXI+" },
+      { name: "Hyundai Creta", baseSuffix: "CR", variant: "SX (O)" },
+      { name: "Mahindra Thar", baseSuffix: "TH", variant: "LX Hard Top" },
+      { name: "Tata Nexon", baseSuffix: "NX", variant: "Fearless+" },
+      { name: "Toyota Fortuner", baseSuffix: "FT", variant: "Legender" },
+      { name: "Kia Seltos", baseSuffix: "SL", variant: "GT Line" },
     ],
   });
 
-  // Create Incentive Slabs
+  // Create Incentive Slabs with INR values
   await prisma.incentiveSlab.createMany({
     data: [
-      { minCars: 1, maxCars: 3, payoutPerCar: 1000 },
-      { minCars: 4, maxCars: 7, payoutPerCar: 2000 },
-      { minCars: 8, maxCars: null, payoutPerCar: 3500 },
+      { minCars: 1, maxCars: 3, payoutPerCar: 5000 },
+      { minCars: 4, maxCars: 7, payoutPerCar: 10000 },
+      { minCars: 8, maxCars: 12, payoutPerCar: 15000 },
+      { minCars: 13, maxCars: null, payoutPerCar: 25000 },
     ],
   });
 
-  console.log("Seed data created successfully!");
+  console.log("Seed data created successfully with Indian car models and INR values!");
 }
 
 main()

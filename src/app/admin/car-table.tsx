@@ -118,7 +118,7 @@ export function CarTable({ initialData }: { initialData: Car[] }) {
         </Dialog>
       </div>
 
-      <div className="rounded-md border border-zinc-800">
+      <div className="rounded-md border border-zinc-800 overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-zinc-800">

@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function Sidebar() {
+export function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const role = session?.user?.role;
@@ -34,12 +34,10 @@ export function Sidebar() {
 
   const links = role === "ADMIN" ? adminLinks : salesLinks;
 
-  if (role === "ADMIN") return null;
-
   return (
-    <aside className="w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col hidden md:flex">
+    <div className="flex flex-col h-full bg-zinc-950">
       <div className="p-6 border-b border-zinc-800">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2" onClick={onItemClick}>
           <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center">
             <div className="h-4 w-4 bg-black rounded-sm" />
           </div>
@@ -58,6 +56,7 @@ export function Sidebar() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={onItemClick}
                 className={cn(
                   "flex items-center justify-between px-3 py-2 rounded-md text-sm transition-all duration-200 group",
                   isActive 
@@ -85,6 +84,19 @@ export function Sidebar() {
           <p className="text-[10px] text-zinc-500 mt-1">Management Dashboard v1.0</p>
         </div>
       </div>
+    </div>
+  );
+}
+
+export function Sidebar() {
+  const { data: session } = useSession();
+  const role = session?.user?.role;
+
+  if (role === "ADMIN") return null;
+
+  return (
+    <aside className="w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col hidden md:flex">
+      <SidebarContent />
     </aside>
   );
 }

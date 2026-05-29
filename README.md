@@ -49,7 +49,7 @@ The primary workspace for Sales Representatives.
 ### 4. System Administration (`/admin`)
 Reserved for users with the **Admin** role.
 - **Vehicle Inventory**: Add, edit, or remove vehicle models and variants available for reporting.
-- **Incentive Tiers (Slabs)**: Define the logic that drives the entire system. Set minimum and maximum car counts for specific payout rates (e.g., 1-3 cars = $1,000/car, 4-7 cars = $2,000/car).
+- **Incentive Tiers (Slabs)**: Define the logic that drives the entire system. Set minimum and maximum car counts for specific payout rates (e.g., 1-3 cars = ₹5,000/car, 4-7 cars = ₹10,000/car).
 
 ---
 

@@ -14,7 +14,7 @@ import {
 import { saveSalesLog } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
-import { TrendingUp, CarFront, Calculator, Minus, Plus } from "lucide-react";
+import { TrendingUp, CarFront, Calculator, Minus, Plus, Loader2 } from "lucide-react";
 
 interface Car {
   id: string;
@@ -140,6 +140,7 @@ export function SalesLoggingInterface({
                       size="icon"
                       className="h-8 w-8 rounded-lg border-zinc-700 bg-zinc-950 text-zinc-400 hover:text-white"
                       onClick={() => handleDecrement(car.id)}
+                      disabled={isSaving}
                     >
                       <Minus className="h-3 w-3" />
                     </Button>
@@ -151,6 +152,7 @@ export function SalesLoggingInterface({
                       size="icon"
                       className="h-8 w-8 rounded-lg border-zinc-700 bg-zinc-950 text-zinc-400 hover:text-white"
                       onClick={() => handleIncrement(car.id)}
+                      disabled={isSaving}
                     >
                       <Plus className="h-3 w-3" />
                     </Button>
@@ -164,7 +166,14 @@ export function SalesLoggingInterface({
                 disabled={isSaving || totalCars === 0}
                 className="bg-white text-black hover:bg-zinc-200 font-semibold px-8"
               >
-                {isSaving ? "Processing..." : "Submit Report"}
+                {isSaving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Report"
+                )}
               </Button>
             </div>
           </CardContent>
@@ -172,7 +181,7 @@ export function SalesLoggingInterface({
       </div>
 
       <div className="space-y-8">
-        <Card className="border-zinc-800 bg-zinc-900 sticky top-24 shadow-2xl overflow-hidden">
+        <Card className="border-zinc-800 bg-zinc-900 lg:sticky lg:top-24 shadow-2xl overflow-hidden">
           <div className="h-1.5 bg-gradient-to-r from-zinc-800 via-zinc-400 to-zinc-800" />
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-lg font-medium">

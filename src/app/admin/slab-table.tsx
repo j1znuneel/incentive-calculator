@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -35,6 +35,7 @@ interface Slab {
 export function SlabTable({ initialData }: { initialData: Slab[] }) {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingSlab, setEditingSlab] = useState<Slab | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   async function handleAdd(formData: FormData) {
@@ -43,12 +44,19 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
     const maxCars = maxCarsRaw === "" ? null : parseInt(maxCarsRaw);
     const payoutPerCar = parseFloat(formData.get("payoutPerCar") as string);
 
+    setIsSubmitting(true);
     try {
-      await addSlab({ minCars, maxCars, payoutPerCar });
-      setIsAddOpen(false);
-      toast({ title: "Success", description: "Slab added successfully." });
+      const result = await addSlab({ minCars, maxCars, payoutPerCar });
+      if (result?.error) {
+        toast({ variant: "destructive", title: "Overlap Error", description: result.error });
+      } else {
+        setIsAddOpen(false);
+        toast({ title: "Success", description: "Slab added successfully." });
+      }
     } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to add slab." });
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -59,12 +67,19 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
     const maxCars = maxCarsRaw === "" ? null : parseInt(maxCarsRaw);
     const payoutPerCar = parseFloat(formData.get("payoutPerCar") as string);
 
+    setIsSubmitting(true);
     try {
-      await updateSlab(editingSlab.id, { minCars, maxCars, payoutPerCar });
-      setEditingSlab(null);
-      toast({ title: "Success", description: "Slab updated successfully." });
+      const result = await updateSlab(editingSlab.id, { minCars, maxCars, payoutPerCar });
+      if (result?.error) {
+        toast({ variant: "destructive", title: "Overlap Error", description: result.error });
+      } else {
+        setEditingSlab(null);
+        toast({ title: "Success", description: "Slab updated successfully." });
+      }
     } catch {
       toast({ variant: "destructive", title: "Error", description: "Failed to update slab." });
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -112,23 +127,32 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="payoutPerCar">Payout Per Car ($)</Label>
-                <Input id="payoutPerCar" name="payoutPerCar" type="number" step="0.01" placeholder="1000.00" required />
+                <Label htmlFor="payoutPerCar">Payout Per Car (₹)</Label>
+                <Input id="payoutPerCar" name="payoutPerCar" type="number" step="1" placeholder="5000" required />
               </div>
               <DialogFooter>
-                <Button type="submit">Save</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save"
+                  )}
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <div className="rounded-md border border-zinc-800">
+      <div className="rounded-md border border-zinc-800 overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-zinc-800">
               <TableHead>Range</TableHead>
-              <TableHead>Payout Per Car</TableHead>
+              <TableHead>Payout Per Car (₹)</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -198,18 +222,27 @@ export function SlabTable({ initialData }: { initialData: Slab[] }) {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-payoutPerCar">Payout Per Car ($)</Label>
+              <Label htmlFor="edit-payoutPerCar">Payout Per Car (₹)</Label>
               <Input
                 id="edit-payoutPerCar"
                 name="payoutPerCar"
                 type="number"
-                step="0.01"
+                step="1"
                 defaultValue={editingSlab?.payoutPerCar}
                 required
               />
             </div>
             <DialogFooter>
-              <Button type="submit">Update</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  "Update"
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>

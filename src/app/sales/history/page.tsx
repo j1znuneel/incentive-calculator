@@ -39,7 +39,7 @@ export default async function SalesHistoryPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border border-zinc-800 overflow-hidden">
+          <div className="rounded-md border border-zinc-800 overflow-x-auto">
             <Table>
               <TableHeader className="bg-zinc-900/50">
                 <TableRow className="hover:bg-transparent border-zinc-800">

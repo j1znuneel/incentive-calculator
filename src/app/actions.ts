@@ -37,14 +37,41 @@ export async function deleteCar(id: string) {
 }
 
 // Slab Actions
+async function validateSlabOverlap(minCars: number, maxCars: number | null, excludeId?: string) {
+  const slabs = await prisma.incentiveSlab.findMany();
+  
+  for (const slab of slabs) {
+    if (excludeId && slab.id === excludeId) continue;
+
+    const slabMin = slab.minCars;
+    const slabMax = slab.maxCars ?? Infinity;
+    const currentMin = minCars;
+    const currentMax = maxCars ?? Infinity;
+
+    // Check if current slab overlaps with existing slab
+    if (currentMin <= slabMax && currentMax >= slabMin) {
+      return `Overlap detected with existing slab ${slabMin}${slab.maxCars ? `-${slab.maxCars}` : "+"} cars.`;
+    }
+  }
+  return null;
+}
+
 export async function addSlab(data: { minCars: number; maxCars: number | null; payoutPerCar: number }) {
+  const overlapError = await validateSlabOverlap(data.minCars, data.maxCars);
+  if (overlapError) return { error: overlapError };
+
   await prisma.incentiveSlab.create({ data });
   revalidatePath("/admin");
+  return { success: true };
 }
 
 export async function updateSlab(id: string, data: { minCars: number; maxCars: number | null; payoutPerCar: number }) {
+  const overlapError = await validateSlabOverlap(data.minCars, data.maxCars, id);
+  if (overlapError) return { error: overlapError };
+
   await prisma.incentiveSlab.update({ where: { id }, data });
   revalidatePath("/admin");
+  return { success: true };
 }
 
 export async function deleteSlab(id: string) {
